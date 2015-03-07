@@ -13,10 +13,10 @@ export interface Args {
 }
 
 export function main(args?: Args) {
-    args = args || parseArgs();
+    args = args || parseProcessArgs();
 
     if (!args) {
-        console.log('usage: icy <url> <optional output folder>');
+        console.log('usage: index <url> <optional output folder>');
         return;
     }
 
@@ -28,14 +28,14 @@ export function main(args?: Args) {
     playlist.get(args.url, (icyUrl, err) => {
 
         if (err) {
-            console.log('url may not a pls. Trying to record directly from url (' + err + ')');
+            console.log('url may not be a pls. Recording directly from url (' + err + ')');
         }
 
-        console.log('reading from ' + icyUrl);
+        console.log('recording from ' + icyUrl);
 
         icecast.get(icyUrl, (res: http.ClientResponse) => {
 
-            console.log('headers:', res.headers);
+            console.log('headers:' + res.headers);
 
             var now = new Date().toISOString().slice(0, 10);
             var genre = res.headers['icy-genre'] || '';
@@ -46,9 +46,7 @@ export function main(args?: Args) {
 
             res.on('metadata', function (metadata: any) { // do not => 
                 var meta = icecast.parse(metadata);
-                //console.log('metadata:', meta);
-
-                var newTitle = meta['StreamTitle'];
+                var newTitle = meta.StreamTitle;
 
                 if (outFile && outFile.streamTitle !== newTitle) {
                     outFile.close();
@@ -82,16 +80,14 @@ export function main(args?: Args) {
     });
 }
 
-function parseArgs(): Args {
+function parseProcessArgs(): Args {
     var args = process.argv;
     if (args.length < 3) {
         return undefined;
     }
 
-    var folder: string;
-    if (args[3]) {
-        folder = args[3];
-    } else {
+    var folder = args[3];
+    if (!folder) {
         folder = path.join(process.cwd(), 'recordings');
         if (!fs.existsSync(folder)) {
             fs.mkdirSync(folder);

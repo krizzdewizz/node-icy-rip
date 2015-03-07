@@ -19,7 +19,7 @@ module.exports = function (grunt) {
             main: {
                 files: [
                     { expand: true, src: ['ffmpeg.exe'], dest: targetFolder },
-                    { expand: true, flatten: true, src: ['build/rec.cmd', 'build/index.js'], dest: targetFolder },
+                    { expand: true, flatten: true, src: ['build/*'], dest: targetFolder },
                 ],
             },
         },
@@ -30,16 +30,16 @@ module.exports = function (grunt) {
                 dest: path.join(targetFolder, 'lib'),
                 options: {
                     module: 'commonjs',
-                    sourceMaps: false,
                     target: 'es5',
                     basePath: 'scripts',
+                    declaration: false,
                     references: [
                         'scripts/**/*.d.ts'
                     ]
                 }
             }
         },
-
+        
         removeDevDeps: {
             src: ['.', targetFolder],
         },

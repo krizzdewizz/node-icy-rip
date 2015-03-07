@@ -67,7 +67,7 @@ export class File {
             } else {
                 this.writeId3Tags(err => {
                     if (err) {
-                        console.error('error writing id3 tags: ', err);
+                        console.error('error writing id3 tags: ' + err);
                     }
                     onFileCompleted();
                 });

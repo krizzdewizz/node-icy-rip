@@ -1,6 +1,10 @@
 ﻿declare module 'icecast' {
-    export function get(icyUrl: string, res: any): void;
-    export function parse(s: any): any;
+    export interface Metadata {
+        StreamTitle?: string;
+    }
+
+    export function get(url: string, response: any): void;
+    export function parse(data: any): Metadata;
 }
 
 declare module 'sanitize-filename' {
@@ -12,6 +16,7 @@ declare module 'ffmetadata' {
     export interface Options {
         'id3v2.3'?: boolean;
     }
+
     export function write(file: string, data: any, opts: Options, callback: (err: Error) => void): any;
 }
 
