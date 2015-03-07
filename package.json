@@ -13,5 +13,10 @@
     "playlist-parser": "0.0.11",
     "sanitize-filename": "1.1.5",
     "xmldom": "0.1.19"
+  },
+  "devDependencies": {
+    "grunt-contrib-clean": "",
+    "grunt-contrib-copy": "",
+    "grunt-typescript": ""
   }
 }
