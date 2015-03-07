@@ -1,4 +1,5 @@
-﻿var icecast = require('icecast');
+﻿///<reference path="./typings/dependencies.d.ts" />
+import icecast = require('icecast');
 import http = require('http');
 import fs = require('fs');
 import path = require('path');

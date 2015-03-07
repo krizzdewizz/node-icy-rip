@@ -1,5 +1,6 @@
-﻿import http = require('http');
-var parsers = require('playlist-parser');
+﻿///<reference path="./typings/dependencies.d.ts" />
+import http = require('http');
+import parsers = require('playlist-parser');
 
 export interface Callback {
     (url: string, err?: Error): void;
@@ -20,7 +21,7 @@ export function get(url: string, callback: Callback): void {
         });
 
         response.on('end',() => {
-            var playlist: any[] = parsers.PLS.parse(buf);
+            var playlist = parsers.PLS.parse(buf);
             if (playlist && playlist[0] && playlist[0].file) {
                 callback(playlist[0].file);
             } else {

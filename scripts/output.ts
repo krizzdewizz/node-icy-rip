@@ -1,7 +1,8 @@
-﻿import fs = require('fs');
+﻿///<reference path="./typings/dependencies.d.ts" />
+import fs = require('fs');
 import path = require('path');
-var sanitize = require('sanitize-filename');
-var ffmetadata = require('ffmetadata');
+import sanitize = require('sanitize-filename');
+import ffmetadata = require('ffmetadata');
 
 function fixName(name: string): string {
     //console.log(name);
@@ -9,7 +10,7 @@ function fixName(name: string): string {
     //return name.replace(/[^a-z0-9 \-\(\)\.]/gi, '_');
 }
 
-var DELETE_SMALL_FILES = false; // may set to false when debugging
+var DELETE_SMALL_FILES = true; // may set to false when debugging
 var MIN_FILE_SIZE = 1024 * 1000; // 1M
 
 export var onFileCompleted: () => void = () => { };
