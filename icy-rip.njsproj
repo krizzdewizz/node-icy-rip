@@ -35,6 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="LICENSE" />
     <Content Include="README.md" />
     <Content Include="build\rec.cmd" />
     <Content Include="package.json" />
