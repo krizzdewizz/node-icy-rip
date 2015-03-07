@@ -12,7 +12,7 @@ export interface Args {
     outputFolder: string;
 }
 
-export function main(args?:Args) {
+export function main(args?: Args) {
     args = args || parseArgs();
 
     if (!args) {
@@ -21,11 +21,11 @@ export function main(args?:Args) {
     }
 
     var terminate = false;
-    process.on('SIGINT',() => {
+    process.on('SIGINT', () => {
         terminate = true;
     });
 
-    playlist.get(args.url,(icyUrl, err) => {
+    playlist.get(args.url, (icyUrl, err) => {
 
         if (err) {
             console.log('url may not a pls. Trying to record directly from url (' + err + ')');
@@ -33,7 +33,7 @@ export function main(args?:Args) {
 
         console.log('reading from ' + icyUrl);
 
-        icecast.get(icyUrl,(res: http.ClientResponse) => {
+        icecast.get(icyUrl, (res: http.ClientResponse) => {
 
             console.log('headers:', res.headers);
 
@@ -42,12 +42,11 @@ export function main(args?:Args) {
             var album = res.headers['icy-name'] || '';
             album += ' - ' + now;
 
-            var fileIndex = 1;
             var outFile: output.File;
 
             res.on('metadata', function (metadata: any) { // do not => 
                 var meta = icecast.parse(metadata);
-                console.log('metadata:', meta);
+                //console.log('metadata:', meta);
 
                 var newTitle = meta['StreamTitle'];
 
@@ -57,16 +56,15 @@ export function main(args?:Args) {
                 }
 
                 if (!outFile) {
-                    outFile = new output.File(args.outputFolder, fileIndex, album, genre, newTitle);
-                    fileIndex++;
+                    outFile = new output.File(args.outputFolder, album, genre, newTitle);
                 }
             });
 
-            res.on('data',(data: Buffer) => {
+            res.on('data', (data: Buffer) => {
 
                 if (!outFile) {
                     // did not yet receive metadata
-                    outFile = new output.File(args.outputFolder, 0, album, genre, '');
+                    outFile = new output.File(args.outputFolder, album, genre, '');
                 }
 
                 progress.task(outFile.fileName);

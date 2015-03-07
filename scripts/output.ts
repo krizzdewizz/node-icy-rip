@@ -21,8 +21,9 @@ export class File {
 
     private file: string;
     private outStream: fs.WriteStream;
+    private index: number;
 
-    constructor(folder: string, public index: number, public album: string, public genre: string, public streamTitle: string) {
+    constructor(folder: string, public album: string, public genre: string, public streamTitle: string) {
         if (streamTitle) {
             var segs = streamTitle.split('-');
             if (segs.length > 0) {
@@ -37,6 +38,8 @@ export class File {
         if (!fs.existsSync(albumFolder)) {
             fs.mkdirSync(albumFolder);
         }
+
+        this.index = fs.readdirSync(albumFolder).length + 1;
         this.createStream(albumFolder);
     }
 
