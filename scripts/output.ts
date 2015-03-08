@@ -1,5 +1,4 @@
-﻿///<reference path="./typings/dependencies.d.ts" />
-import fs = require('fs');
+﻿import fs = require('fs');
 import path = require('path');
 import sanitize = require('sanitize-filename');
 import ffmetadata = require('ffmetadata');
@@ -59,9 +58,7 @@ export class File {
         this.outStream = fs.createWriteStream(file, { flags: 'w' });
         this.outStream.on('close', () => {
 
-            var size = fs.statSync(this.file).size;
-
-            if (DELETE_SMALL_FILES && size < MIN_FILE_SIZE) {
+            if (DELETE_SMALL_FILES && fs.statSync(this.file).size < MIN_FILE_SIZE) {
                 fs.unlinkSync(this.file);
                 onFileCompleted();
             } else {

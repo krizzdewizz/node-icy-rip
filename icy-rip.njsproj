@@ -13,8 +13,7 @@
     <ProjectGuid>e5b54282-f550-4fa2-aa32-eaa0f325c813</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>
-    </StartupFile>
+    <StartupFile>index.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -39,9 +38,10 @@
     <Content Include="README.md" />
     <Content Include="build\rec.cmd" />
     <Content Include="package.json" />
+    <Content Include="rec.cmd" />
     <TypeScriptCompile Include="scripts\icy.ts" />
     <TypeScriptCompile Include="scripts\output.ts" />
-    <TypeScriptCompile Include="scripts\playlist.ts" />
+    <TypeScriptCompile Include="scripts\discover.ts" />
     <TypeScriptCompile Include="scripts\progress.ts" />
     <TypeScriptCompile Include="scripts\test\test.ts" />
     <TypeScriptCompile Include="scripts\typings\dependencies.d.ts" />
@@ -51,16 +51,20 @@
     <Folder Include="build\" />
     <Folder Include="deploy\" />
     <Folder Include="scripts\" />
+    <Folder Include="scripts\follow-redirects\" />
     <Folder Include="scripts\test\" />
     <Folder Include="scripts\typings\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gruntfile.js" />
     <Compile Include="build\index.js" />
+    <Compile Include="index.js" />
+    <Compile Include="scripts\follow-redirects\index.js" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />

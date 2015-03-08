@@ -1,17 +1,33 @@
-﻿///<reference path="./typings/dependencies.d.ts" />
-import http = require('http');
+﻿var http = require('./follow-redirects').http;
 import parsers = require('playlist-parser');
 
 export interface Callback {
     (url: string, err?: Error): void;
 }
 
-export function get(url: string, callback: Callback): void {
+export function discoverIcyUrl(url: string, callback: Callback): void {
+    __get(url,(icyUrl: string, err: Error) => {
+        var req = http.get(icyUrl,(res: any) => {
+            req.abort();
+            callback(http.lastRedirectUrl || icyUrl);
+        });
 
-    var req = http.get(url,(response: http.ClientResponse) => {
+        req.on('error',(err: Error) => {
+            if (err['code'] === 'HPE_INVALID_CONSTANT') {
+                callback(icyUrl);
+            } else {
+                callback(url, err);
+            }
+        });
+    });
+}
+
+function __get(url: string, callback: Callback): void {
+
+    var req = http.get(url,(response: any) => {
         var contentType: string = response.headers['content-type'] || '';
         if (contentType.indexOf('pls') == 0) {
-            callback(url, new Error('not a pls.'));
+            callback(url); // not a pls.
             return;
         }
 

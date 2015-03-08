@@ -1,10 +1,8 @@
-﻿///<reference path="./typings/dependencies.d.ts" />
-import icecast = require('icecast');
-import http = require('http');
+﻿import icecast = require('icecast');
 import fs = require('fs');
 import path = require('path');
 import output = require('./output');
-import playlist = require('./playlist');
+import discover = require('./discover');
 import progress = require('./progress');
 
 export interface Args {
@@ -25,17 +23,17 @@ export function main(args?: Args) {
         terminate = true;
     });
 
-    playlist.get(args.url, (icyUrl, err) => {
+    discover.discoverIcyUrl(args.url, (icyUrl, err) => {
 
         if (err) {
-            console.log('url may not be a pls. Recording directly from url (' + err + ')');
+            console.log('discover says: ' + err);
         }
 
         console.log('recording from ' + icyUrl);
 
-        icecast.get(icyUrl, (res: http.ClientResponse) => {
+        icecast.get(icyUrl, (res: any) => {
 
-            console.log('headers:' + res.headers);
+            console.log('headers:' + JSON.stringify(res.headers));
 
             var now = new Date().toISOString().slice(0, 10);
             var genre = res.headers['icy-genre'] || '';
