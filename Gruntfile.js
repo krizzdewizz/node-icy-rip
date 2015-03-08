@@ -18,7 +18,7 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
-                    { expand: true, src: ['ffmpeg.exe'], dest: targetFolder },
+                    { expand: true, src: ['ffmpeg.exe', 'README.md', 'LICENSE'], dest: targetFolder },
                     { expand: true, flatten: true, src: ['build/*'], dest: targetFolder },
                     { expand: true, cwd:'scripts', src: ['follow-redirects/**'], dest: path.join(targetFolder, 'lib') },
                 ],
