@@ -36,7 +36,6 @@
   <ItemGroup>
     <Content Include="LICENSE" />
     <Content Include="README.md" />
-    <Content Include="build\rec.cmd" />
     <Content Include="package.json" />
     <Content Include="rec.cmd" />
     <TypeScriptCompile Include="scripts\icy.ts" />
