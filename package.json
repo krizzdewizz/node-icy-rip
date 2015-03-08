@@ -32,6 +32,8 @@
         "xmldom": "0.1.19"
     },
     "devDependencies": {
+        "grunt": "",
+        "typescript": "",
         "grunt-contrib-clean": "",
         "grunt-contrib-copy": "",
         "grunt-typescript": ""

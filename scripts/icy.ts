@@ -19,8 +19,12 @@ export function main(args?: Args) {
     }
 
     var terminate = false;
+    var sigInts = 0;
     process.on('SIGINT', () => {
         terminate = true;
+        if (sigInts++ > 5) {
+            process.exit();
+        }
     });
 
     discover.discoverIcyUrl(args.url, (icyUrl, err) => {

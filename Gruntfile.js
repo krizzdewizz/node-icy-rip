@@ -20,6 +20,7 @@ module.exports = function (grunt) {
                 files: [
                     { expand: true, src: ['ffmpeg.exe'], dest: targetFolder },
                     { expand: true, flatten: true, src: ['build/*'], dest: targetFolder },
+                    { expand: true, cwd:'scripts', src: ['follow-redirects/**'], dest: path.join(targetFolder, 'lib') },
                 ],
             },
         },
