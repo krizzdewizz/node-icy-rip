@@ -30,4 +30,4 @@ From where to get an url?
 -------------------------
 You may want to visit the [SHOUTcast](https://http://shoutcast.com "SHOUTcast") website and copy the url to the clipboard:
 
-![SHOUTcast directory](https://github.com/krizzdewizz/node-icy-rip/tree/master/build/doc/urlsource.png)
+![SHOUTcast directory](https://raw.githubusercontent.com/krizzdewizz/node-icy-rip/master/doc/urlsource.png)
