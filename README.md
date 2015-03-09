@@ -24,7 +24,7 @@ To cancel recording, press `ctrl+c`.
 
 ID3 tags
 --------
-In order to add id3 tags to the recorded files, [ffmpeg](https://www.ffmpeg.org "ffmpeg") must be installed on your system.
+In order to add ID3 tags to the recorded files, <a href="https://www.ffmpeg.org" target="_blank">ffmpeg</a> must be installed on your system.
 
 From where to get an url?
 -------------------------
