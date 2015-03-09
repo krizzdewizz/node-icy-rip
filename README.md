@@ -7,7 +7,7 @@ Installation
 Install with `npm`:
 
 ``` bash
-$ npm install -g icy-rip
+$ npm install icy-rip -g
 ```
 
 Recording
