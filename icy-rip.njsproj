@@ -34,6 +34,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="doc\urlsource.png" />
     <Content Include="LICENSE" />
     <Content Include="README.md" />
     <Content Include="package.json" />
@@ -49,6 +50,7 @@
   <ItemGroup>
     <Folder Include="build\" />
     <Folder Include="deploy\" />
+    <Folder Include="doc\" />
     <Folder Include="scripts\" />
     <Folder Include="scripts\follow-redirects\" />
     <Folder Include="scripts\test\" />

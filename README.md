@@ -25,3 +25,9 @@ To cancel recording, press `ctrl+c`.
 ID3 tags
 --------
 In order to add id3 tags to the recorded files, [ffmpeg](https://www.ffmpeg.org "ffmpeg") must be installed on your system.
+
+From where to get an url?
+-------------------------
+You may want to visit the [SHOUTcast](https://http://shoutcast.com "SHOUTcast") website and copy the url to the clipboard:
+
+![SHOUTcast directory](https://github.com/krizzdewizz/node-icy-rip/tree/master/build/doc/urlsource.png)
