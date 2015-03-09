@@ -14,7 +14,7 @@ export function main(args?: Args) {
     args = args || parseProcessArgs();
 
     if (!args) {
-        console.log('usage: index <url> <optional output folder>');
+        console.log('usage: icy-rip <url> <optional output folder>');
         return;
     }
 
