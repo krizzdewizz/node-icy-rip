@@ -1,4 +1,4 @@
-# node-icy-rip
+# icy-rip
 NodeJS CLI tool for ripping SHOUTcast/Icecast radio streams to individual audio files.
 
 Installation
