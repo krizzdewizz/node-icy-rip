@@ -47,22 +47,26 @@ export function main(args?: Args) {
             res.on('metadata', function (metadata: any) { // do not => 
                 var meta = icecast.parse(metadata);
                 var newTitle = meta.StreamTitle;
-
+                var trackNumberOffset = 0;
                 if (outFile && outFile.streamTitle !== newTitle) {
+                    if (outFile.isInitialFileWithoutMetadata) {
+                        outFile.deleteOnClose = true;
+                        trackNumberOffset = -1;
+                    }
                     outFile.close();
                     outFile = undefined;
                 }
 
                 if (!outFile) {
-                    outFile = new output.File(args.outputFolder, album, genre, newTitle);
+                    outFile = new output.File(args.outputFolder, trackNumberOffset, album, genre, newTitle);
                 }
             });
 
             res.on('data',(data: Buffer) => {
 
                 if (!outFile) {
-                    // did not yet receive metadata
-                    outFile = new output.File(args.outputFolder, album, genre, '');
+                    outFile = new output.File(args.outputFolder, 0, album, genre, '');
+                    outFile.isInitialFileWithoutMetadata = true;
                 }
 
                 progress.task(outFile.fileName);

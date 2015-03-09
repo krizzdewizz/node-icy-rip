@@ -37,14 +37,16 @@ function ffmpegTest(callback: (ok: boolean) => void): void {
 }
 
 export class File {
-    artist = 'artist';
-    title = 'track';
+    artist: string = 'artist';
+    title: string = 'track';
+    isInitialFileWithoutMetadata: boolean = false;
+    deleteOnClose: boolean = false;
 
     private file: string;
     private outStream: fs.WriteStream;
     private trackNumber: number; // starting at 1
 
-    constructor(folder: string, public album: string, public genre: string, public streamTitle: string) {
+    constructor(folder: string, trackNumberOffset: number, public album: string, public genre: string, public streamTitle: string) {
         if (streamTitle) {
             var segs = streamTitle.split('-');
             if (segs.length > 0) {
@@ -60,7 +62,7 @@ export class File {
             fs.mkdirSync(albumFolder);
         }
 
-        this.trackNumber = fs.readdirSync(albumFolder).length + 1;
+        this.trackNumber = fs.readdirSync(albumFolder).length + 1 + trackNumberOffset;
         this.createStream(albumFolder);
     }
 
@@ -78,9 +80,9 @@ export class File {
 
         this.file = file;
         this.outStream = fs.createWriteStream(file, { flags: 'w' });
-        this.outStream.once('close', () => {
+        this.outStream.once('close',() => {
 
-            if (DELETE_SMALL_FILES && fs.statSync(this.file).size < MIN_FILE_SIZE) {
+            if (this.deleteOnClose || DELETE_SMALL_FILES && fs.statSync(this.file).size < MIN_FILE_SIZE) {
                 fs.unlinkSync(this.file);
                 onFileCompleted();
             } else {
