@@ -6,7 +6,7 @@ export interface Callback {
 }
 
 export function discoverIcyUrl(url: string, callback: Callback): void {
-    __get(url,(icyUrl: string, err: Error) => {
+    tryPlaylist(url,(icyUrl: string, err: Error) => {
         var req = http.get(icyUrl,(res: any) => {
             req.abort();
             callback(http.lastRedirectUrl || icyUrl);
@@ -32,7 +32,7 @@ function parserFromContentType(contentType: string): parsers.Parser {
     }
 }
 
-function __get(url: string, callback: Callback): void {
+function tryPlaylist(url: string, callback: Callback): void {
 
     var req = http.get(url,(response: any) => {
         var contentType: string = response.headers['content-type'] || '';

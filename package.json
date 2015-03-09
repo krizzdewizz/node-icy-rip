@@ -1,8 +1,10 @@
 {
     "name": "icy-rip",
-    "version": "0.8.2",
+    "version": "0.8.8",
     "description": "icy-rip - SHOUTcast/Icecast stream recorder",
-    "main": "index.js",
+    "main": "./index.js",
+    "bin": "./index.js",
+    "preferGlobal": true,
     "author": {
         "name": "Christian Oetterli",
         "email": "christian@o3tt3rli.com"
