@@ -13,7 +13,7 @@ export function discoverIcyUrl(url: string, callback: Callback): void {
         });
 
         req.on('error',(err: Error) => {
-            if (err['code'] === 'HPE_INVALID_CONSTANT') {
+            if (err['code'] === 'HPE_INVALID_CONSTANT') { // thrown by node http because of ICY response -> assume found
                 callback(icyUrl);
             } else {
                 callback(url, err);
@@ -22,12 +22,24 @@ export function discoverIcyUrl(url: string, callback: Callback): void {
     });
 }
 
+function parserFromContentType(contentType: string): parsers.Parser {
+    if (contentType.indexOf('pls') >= 0) {
+        return parsers.PLS;
+    } else if (contentType.indexOf('m3u') >= 0 || contentType.indexOf('audio/x-mpegurl') >= 0) {
+        return parsers.M3U;
+    } else {
+        return undefined;
+    }
+}
+
 function __get(url: string, callback: Callback): void {
 
     var req = http.get(url,(response: any) => {
         var contentType: string = response.headers['content-type'] || '';
-        if (contentType.indexOf('pls') == 0) {
-            callback(url); // not a pls.
+        var parser = parserFromContentType(contentType);
+        if (!parser) {
+            callback(url); // not a known playlist.
+            req.abort();
             return;
         }
 
@@ -37,7 +49,7 @@ function __get(url: string, callback: Callback): void {
         });
 
         response.on('end',() => {
-            var playlist = parsers.PLS.parse(buf);
+            var playlist = parser.parse(buf);
             if (playlist && playlist[0] && playlist[0].file) {
                 callback(playlist[0].file);
             } else {

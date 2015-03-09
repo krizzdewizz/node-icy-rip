@@ -28,5 +28,6 @@ declare module 'playlist-parser' {
         parse(data: string): Track[];
     }
     export var PLS: Parser;
+    export var M3U: Parser;
 }
 
