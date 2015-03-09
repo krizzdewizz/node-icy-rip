@@ -28,6 +28,6 @@ In order to add id3 tags to the recorded files, [ffmpeg](https://www.ffmpeg.org 
 
 From where to get an url?
 -------------------------
-You may want to visit the <a href="http://shoutcast.com/" target="_blank">SHOUTcast</a> website and copy the url to the clipboard:
+You may want to visit the <a href="http://shoutcast.com/" target="_blank">SHOUTcast</a> website, copy the url to the clipboard and paste it to shell window:
 
 ![SHOUTcast directory](https://raw.githubusercontent.com/krizzdewizz/node-icy-rip/master/doc/urlsource.png)
