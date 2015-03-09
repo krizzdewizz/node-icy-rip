@@ -22,4 +22,4 @@ if `optional output folder` is missing, files will be placed in a `recordings` f
 
 ID3 tags
 --------
-In order to add id3 tags to the recorded files, `ffmpeg` must be installed on your system.
+In order to add id3 tags to the recorded files, [ffmpeg](https://www.ffmpeg.org "ffmpeg") must be installed on your system.
