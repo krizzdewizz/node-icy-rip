@@ -24,7 +24,7 @@ function ffmpegTest(callback: (ok: boolean) => void): void {
         return;
     }
 
-    var cp = childProcess.spawn('ffmpeg');
+    var cp = childProcess.spawn('ffmpeg', ['-version']);
     var ok = true;
     cp.on('error', err => {
         console.error('\'ffmpeg\' was not found. You may need to install it or ensure that it is found in the path. ID3 tagging will be disabled (' + err + ')');
