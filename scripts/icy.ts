@@ -20,14 +20,14 @@ export function main(args?: Args) {
 
     var terminate = false;
     var sigInts = 0;
-    process.on('SIGINT', () => {
+    process.on('SIGINT',() => {
         terminate = true;
         if (sigInts++ > 3) {
             process.exit();
         }
     });
 
-    discover.discoverIcyUrl(args.url, (icyUrl, err) => {
+    discover.discoverIcyUrl(args.url,(icyUrl, err) => {
 
         if (err) {
             console.log('discover says: ' + err);
@@ -35,14 +35,12 @@ export function main(args?: Args) {
 
         console.log('recording from ' + icyUrl);
 
-        icecast.get(icyUrl, (res: any) => {
+        icecast.get(icyUrl,(res: any) => {
 
             console.log('headers:' + JSON.stringify(res.headers));
 
-            var now = new Date().toISOString().slice(0, 10);
             var genre = res.headers['icy-genre'] || '';
             var album = res.headers['icy-name'] || '';
-            album += ' - ' + now;
 
             var outFile: output.File;
 
@@ -60,7 +58,7 @@ export function main(args?: Args) {
                 }
             });
 
-            res.on('data', (data: Buffer) => {
+            res.on('data',(data: Buffer) => {
 
                 if (!outFile) {
                     // did not yet receive metadata

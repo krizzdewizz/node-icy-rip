@@ -42,7 +42,7 @@ export class File {
 
     private file: string;
     private outStream: fs.WriteStream;
-    private index: number;
+    private trackNumber: number; // starting at 1
 
     constructor(folder: string, public album: string, public genre: string, public streamTitle: string) {
         if (streamTitle) {
@@ -60,7 +60,7 @@ export class File {
             fs.mkdirSync(albumFolder);
         }
 
-        this.index = fs.readdirSync(albumFolder).length + 1;
+        this.trackNumber = fs.readdirSync(albumFolder).length + 1;
         this.createStream(albumFolder);
     }
 
@@ -78,7 +78,7 @@ export class File {
 
         this.file = file;
         this.outStream = fs.createWriteStream(file, { flags: 'w' });
-        this.outStream.on('close', () => {
+        this.outStream.once('close', () => {
 
             if (DELETE_SMALL_FILES && fs.statSync(this.file).size < MIN_FILE_SIZE) {
                 fs.unlinkSync(this.file);
@@ -112,11 +112,12 @@ export class File {
 
             // http://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
             var data = {
+                title: this.title,
                 artist: this.artist,
                 album: this.album,
-                track: this.title,
                 genre: this.genre,
-                year: new Date().getFullYear()
+                track: this.trackNumber,
+                date: new Date().getFullYear()
             };
 
             ffmetadata.write(this.file, data, { 'id3v2.3': true }, callback);
@@ -124,7 +125,7 @@ export class File {
     }
 
     private getUniqueFileName(folder: string, index: number): string {
-        var name = [this.index, this.artist, this.title].join(' - ');
+        var name = [this.trackNumber, this.artist, this.title].join(' - ');
         if (index > 0) {
             name += ' (' + index + ')';
         }
