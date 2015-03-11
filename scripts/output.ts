@@ -28,7 +28,7 @@ function ffmpegTest(callback: (ok: boolean) => void): void {
     var cp = childProcess.spawn('ffmpeg', ['-version']);
     var ok = true;
     cp.on('error', err => {
-        log.log('\'ffmpeg\' was not found. You may need to install it or ensure that it is found in the path. ID3 tagging will be disabled (' + err + ')');
+        log('\'ffmpeg\' was not found. You may need to install it or ensure that it is found in the path. ID3 tagging will be disabled (' + err + ')');
         ok = false;
     });
     cp.on('close',() => {
@@ -89,7 +89,7 @@ export class File {
             } else {
                 this.writeId3Tags(err => {
                     if (err) {
-                        log.log('Error writing ID3 tags: ' + err);
+                        log('Error writing ID3 tags: ' + err);
                     }
                     onFileCompleted();
                 });

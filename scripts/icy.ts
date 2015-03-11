@@ -16,28 +16,27 @@ export function main(args?: Args) {
     args = args || parseProcessArgs();
 
     if (!args) {
-        log.log('Usage: icy-rip <url> [optional output folder][-t writes audio data to stdout]');
+        log('Usage: icy-rip <url> [optional output folder][-t writes audio data to stdout]');
         return;
     }
 
     var terminate = false;
     var sigInts = 0;
-    var teeToStdout = args.teeToStdout;
     var doNothing = () => { };
-    var writeToStdout: (data: any) => void = teeToStdout ? data => process.stdout.write(data) : doNothing;
-    var progressTask: (msg: string) => void = teeToStdout ? doNothing : progress.task;
+    var writeToStdout: (data: any) => void = args.teeToStdout ? data => process.stdout.write(data) : doNothing;
+    var progressTask: (msg: string) => void = args.teeToStdout ? doNothing : progress.task;
 
-    if (teeToStdout) {
+    if (args.teeToStdout) {
         process.stdout.on('error', doNothing);
     }
 
-    log.enabled = !teeToStdout;
+    log.enabled = !args.teeToStdout;
 
     fixMaxEventListenersWarning();
 
     process.on('SIGINT',() => {
         terminate = true;
-        log.log('\nWriting last packet before terminating.\n');
+        log('\nWriting last packet before terminating.\n');
         if (sigInts++ > 3) {
             process.exit();
         }
@@ -46,13 +45,13 @@ export function main(args?: Args) {
     discover.discoverIcyUrl(args.url,(icyUrl, err) => {
 
         if (err) {
-            log.log('Discover says: ' + err);
+            log('Discover says: ' + err);
         }
 
         icecast.get(icyUrl,(res: any) => {
 
-            log.log('Recording from ' + icyUrl);
-            log.log(formatHeaders(res.headers));
+            log('Recording from ' + icyUrl);
+            log(formatHeaders(res.headers));
 
             var genre = res.headers['icy-genre'] || '';
             var album = res.headers['icy-name'] || '';
@@ -143,6 +142,6 @@ function fixMaxEventListenersWarning(): void {
         // http://stackoverflow.com/questions/9768444/possible-eventemitter-memory-leak-detected
         require('events').EventEmitter.prototype._maxListeners = 100;
     } catch (e) {
-        log.log(e);
+        log(e);
     }
 }
