@@ -33,6 +33,6 @@ In order to add ID3 tags to the recorded files, `ffmpeg` must be present on the 
 
 From where to get an url?
 -------------------------
-You may want to visit the SHOUTcast website, copy the url to the clipboard and paste it to the shell window:
+You may want to visit the SHOUTcast website, copy the Winamp (PLS) or M3U url to the clipboard and paste it to the shell window:
 
 ![SHOUTcast directory](https://raw.githubusercontent.com/krizzdewizz/node-icy-rip/master/doc/urlsource.png)
