@@ -13,7 +13,8 @@
     <ProjectGuid>e5b54282-f550-4fa2-aa32-eaa0f325c813</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>index.js</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -44,6 +45,7 @@
     <TypeScriptCompile Include="scripts\output.ts" />
     <TypeScriptCompile Include="scripts\discover.ts" />
     <TypeScriptCompile Include="scripts\progress.ts" />
+    <TypeScriptCompile Include="scripts\test\rec.ts" />
     <TypeScriptCompile Include="scripts\test\test.ts" />
     <TypeScriptCompile Include="scripts\typings\dependencies.d.ts" />
     <TypeScriptCompile Include="scripts\typings\node.d.ts" />
@@ -61,7 +63,6 @@
   <ItemGroup>
     <Compile Include="Gruntfile.js" />
     <Compile Include="build\index" />
-    <Compile Include="index.js" />
     <Compile Include="scripts\follow-redirects\index.js" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
