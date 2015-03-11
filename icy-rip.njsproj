@@ -40,6 +40,7 @@
     <Content Include="package.json" />
     <Content Include="rec.cmd" />
     <TypeScriptCompile Include="scripts\icy.ts" />
+    <TypeScriptCompile Include="scripts\log.ts" />
     <TypeScriptCompile Include="scripts\output.ts" />
     <TypeScriptCompile Include="scripts\discover.ts" />
     <TypeScriptCompile Include="scripts\progress.ts" />
@@ -51,6 +52,7 @@
     <Folder Include="build\" />
     <Folder Include="deploy\" />
     <Folder Include="doc\" />
+    <Folder Include="NewFolder1\" />
     <Folder Include="scripts\" />
     <Folder Include="scripts\follow-redirects\" />
     <Folder Include="scripts\test\" />
@@ -58,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gruntfile.js" />
-    <Compile Include="build\index.js" />
+    <Compile Include="build\index" />
     <Compile Include="index.js" />
     <Compile Include="scripts\follow-redirects\index.js" />
   </ItemGroup>

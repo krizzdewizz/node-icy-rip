@@ -1,9 +1,9 @@
 {
     "name": "icy-rip",
-    "version": "0.8.11",
+    "version": "0.8.15",
     "description": "SHOUTcast/Icecast stream recorder",
-    "main": "./index.js",
-    "bin": "./index.js",
+    "main": "./index",
+    "bin": "./index",
     "preferGlobal": true,
     "author": {
         "name": "Christian Oetterli",
@@ -24,7 +24,15 @@
         "rip",
         "record"
     ],
-    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/krizzdewizz/node-icy-rip/issues"
+    },
+    "licenses": [
+        {
+            "type": "Apache License 2.0",
+            "url": "https://github.com/krizzdewizz/node-icy-rip/blob/master/LICENSE"
+        }
+    ],
     "dependencies": {
         "ffmetadata": "1.3.0",
         "underscore": "1.8.2",

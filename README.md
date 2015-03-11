@@ -14,11 +14,16 @@ Recording
 ---------
 
 ``` bash
-$ icy-rip <url> <optional output folder>
+$ icy-rip <url> [optional output folder][-t]
 ```
 
 Where `url` can be a SHOUTcast/Icecast stream, a PLS or M3U playlist.
 if `optional output folder` is missing, files will be placed in a `recordings` folder underneath the current directory.
+If `-t` is given, the raw audio data is written also to stdout, to be consumed by other programs such as `mpg123`.
+
+``` bash
+$ icy-rip http://1.2.3.4:5678 -t | mpg123 -
+```
 
 To cancel recording, press `ctrl+c`.
 

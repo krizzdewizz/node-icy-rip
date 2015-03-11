@@ -4,24 +4,40 @@ import path = require('path');
 import output = require('./output');
 import discover = require('./discover');
 import progress = require('./progress');
+import log = require('./log');
 
 export interface Args {
     url: string;
     outputFolder: string;
+    teeToStdout: boolean;
 }
 
 export function main(args?: Args) {
     args = args || parseProcessArgs();
 
     if (!args) {
-        console.log('usage: icy-rip <url> <optional output folder>');
+        log.log('Usage: icy-rip <url> [optional output folder][-t writes audio data to stdout]');
         return;
     }
 
     var terminate = false;
     var sigInts = 0;
+    var teeToStdout = args.teeToStdout;
+    var doNothing = () => { };
+    var writeToStdout: (data: any) => void = teeToStdout ? data => process.stdout.write(data) : doNothing;
+    var progressTask: (msg: string) => void = teeToStdout ? doNothing : progress.task;
+
+    if (teeToStdout) {
+        process.stdout.on('error', doNothing);
+    }
+
+    log.enabled = !teeToStdout;
+
+    fixMaxEventListenersWarning();
+
     process.on('SIGINT',() => {
         terminate = true;
+        log.log('\nWriting last packet before terminating.\n');
         if (sigInts++ > 3) {
             process.exit();
         }
@@ -30,14 +46,13 @@ export function main(args?: Args) {
     discover.discoverIcyUrl(args.url,(icyUrl, err) => {
 
         if (err) {
-            console.log('discover says: ' + err);
+            log.log('Discover says: ' + err);
         }
-
-        console.log('recording from ' + icyUrl);
 
         icecast.get(icyUrl,(res: any) => {
 
-            console.log('headers:' + JSON.stringify(res.headers));
+            log.log('Recording from ' + icyUrl);
+            log.log(formatHeaders(res.headers));
 
             var genre = res.headers['icy-genre'] || '';
             var album = res.headers['icy-name'] || '';
@@ -69,14 +84,13 @@ export function main(args?: Args) {
                     outFile.isInitialFileWithoutMetadata = true;
                 }
 
-                progress.task(outFile.fileName);
+                progressTask(outFile.fileName);
 
                 outFile.write(data);
+                writeToStdout(data);
 
                 if (terminate) {
-
                     output.onFileCompleted = process.exit;
-
                     outFile.close();
                 }
             });
@@ -84,8 +98,27 @@ export function main(args?: Args) {
     });
 }
 
-function parseProcessArgs(): Args {
-    var args = process.argv;
+interface Parsed {
+    args: string[];
+    tee: boolean;
+}
+
+function findTee(args: string[]): Parsed {
+    var all: string[] = [];
+    var tee = false;
+    args.forEach(it => {
+        if (it === '-t') {
+            tee = true;
+        } else {
+            all.push(it);
+        }
+    });
+    return { args: all, tee: tee };
+}
+
+export function parseProcessArgs(): Args {
+    var parsed = findTee(process.argv);
+    var args = parsed.args;
     if (args.length < 3) {
         return undefined;
     }
@@ -98,5 +131,18 @@ function parseProcessArgs(): Args {
         }
     }
 
-    return { url: args[2], outputFolder: folder };
+    return { url: args[2], outputFolder: folder, teeToStdout: parsed.tee };
+}
+
+function formatHeaders(headers: any): string {
+    return Object.keys(headers).map(k => k + ': ' + headers[k]).join('\n');
+}
+
+function fixMaxEventListenersWarning(): void {
+    try {
+        // http://stackoverflow.com/questions/9768444/possible-eventemitter-memory-leak-detected
+        require('events').EventEmitter.prototype._maxListeners = 100;
+    } catch (e) {
+        log.log(e);
+    }
 }

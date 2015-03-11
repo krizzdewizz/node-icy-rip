@@ -3,9 +3,10 @@ import path = require('path');
 import sanitize = require('sanitize-filename');
 import ffmetadata = require('ffmetadata');
 import childProcess = require('child_process');
+import log = require('./log');
 
 function fixName(name: string): string {
-    //console.log(name);
+    //log.log(name);
     return sanitize(name);
     //return name.replace(/[^a-z0-9 \-\(\)\.]/gi, '_');
 }
@@ -27,7 +28,7 @@ function ffmpegTest(callback: (ok: boolean) => void): void {
     var cp = childProcess.spawn('ffmpeg', ['-version']);
     var ok = true;
     cp.on('error', err => {
-        console.error('\'ffmpeg\' was not found. You may need to install it or ensure that it is found in the path. ID3 tagging will be disabled (' + err + ')');
+        log.log('\'ffmpeg\' was not found. You may need to install it or ensure that it is found in the path. ID3 tagging will be disabled (' + err + ')');
         ok = false;
     });
     cp.on('close',() => {
@@ -88,7 +89,7 @@ export class File {
             } else {
                 this.writeId3Tags(err => {
                     if (err) {
-                        console.error('error writing id3 tags: ' + err);
+                        log.log('Error writing ID3 tags: ' + err);
                     }
                     onFileCompleted();
                 });
@@ -108,21 +109,21 @@ export class File {
 
         ffmpegTest(ok => {
             if (!ok) {
-                callback(new Error('ffmpeg not found'));
                 return;
             }
 
-            // http://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
-            var data = {
-                title: this.title,
-                artist: this.artist,
-                album: this.album,
-                genre: this.genre,
-                track: this.trackNumber,
-                date: new Date().getFullYear()
-            };
-
-            ffmetadata.write(this.file, data, { 'id3v2.3': true }, callback);
+            setTimeout(() => {
+                // http://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
+                var data = {
+                    title: this.title,
+                    artist: this.artist,
+                    album: this.album,
+                    genre: this.genre,
+                    track: this.trackNumber,
+                    date: new Date().getFullYear()
+                };
+                ffmetadata.write(this.file, data, { 'id3v2.3': true }, callback);
+            }, 800);
         });
     }
 
