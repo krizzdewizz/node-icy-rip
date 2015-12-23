@@ -20,11 +20,11 @@ export function main(args?: Args) {
         return;
     }
 
-    var terminate = false;
-    var sigInts = 0;
-    var doNothing = () => { };
-    var writeToStdout: (data: any) => void = args.teeToStdout ? data => process.stdout.write(data) : doNothing;
-    var progressTask: (msg: string) => void = args.teeToStdout ? doNothing : progress.task;
+    let terminate = false;
+    let sigInts = 0;
+    const doNothing = () => { /* do nothing */ };
+    const writeToStdout: (data: any) => void = args.teeToStdout ? data => process.stdout.write(data) : doNothing;
+    const progressTask: (msg: string) => void = args.teeToStdout ? doNothing : progress.task;
 
     if (args.teeToStdout) {
         process.stdout.on('error', doNothing);
@@ -34,7 +34,7 @@ export function main(args?: Args) {
 
     fixMaxEventListenersWarning();
 
-    process.on('SIGINT',() => {
+    process.on('SIGINT', () => {
         terminate = true;
         log('\nWriting last packet before terminating.\n');
         if (sigInts++ > 3) {
@@ -42,26 +42,26 @@ export function main(args?: Args) {
         }
     });
 
-    discover.discoverIcyUrl(args.url,(icyUrl, err) => {
+    discover.discoverIcyUrl(args.url, (icyUrl, err) => {
 
         if (err) {
             log('Discover says: ' + err);
         }
 
-        icecast.get(icyUrl,(res: any) => {
+        icecast.get(icyUrl, (res: any) => {
 
             log('Recording from ' + icyUrl);
             log(formatHeaders(res.headers));
 
-            var genre = res.headers['icy-genre'] || '';
-            var album = res.headers['icy-name'] || '';
+            const genre = res.headers['icy-genre'] || '';
+            const album = res.headers['icy-name'] || '';
 
-            var outFile: output.File;
+            let outFile: output.File;
 
-            res.on('metadata', function (metadata: any) { // do not => 
-                var meta = icecast.parse(metadata);
-                var newTitle = meta.StreamTitle;
-                var trackNumberOffset = 0;
+            res.on('metadata', function(metadata: any) { // do not =>
+                const meta = icecast.parse(metadata);
+                const newTitle = meta.StreamTitle;
+                let trackNumberOffset = 0;
                 if (outFile && outFile.streamTitle !== newTitle) {
                     if (outFile.isInitialFileWithoutMetadata) {
                         outFile.deleteOnClose = true;
@@ -76,7 +76,7 @@ export function main(args?: Args) {
                 }
             });
 
-            res.on('data',(data: Buffer) => {
+            res.on('data', (data: Buffer) => {
 
                 if (!outFile) {
                     outFile = new output.File(args.outputFolder, 0, album, genre, '');
@@ -103,8 +103,8 @@ interface Parsed {
 }
 
 function findTee(args: string[]): Parsed {
-    var all: string[] = [];
-    var tee = false;
+    const all: string[] = [];
+    let tee = false;
     args.forEach(it => {
         if (it === '-t') {
             tee = true;
@@ -116,13 +116,13 @@ function findTee(args: string[]): Parsed {
 }
 
 export function parseProcessArgs(): Args {
-    var parsed = findTee(process.argv);
-    var args = parsed.args;
+    const parsed = findTee(process.argv);
+    const args = parsed.args;
     if (args.length < 3) {
         return undefined;
     }
 
-    var folder = args[3];
+    let folder = args[3];
     if (!folder) {
         folder = path.join(process.cwd(), 'recordings');
         if (!fs.existsSync(folder)) {

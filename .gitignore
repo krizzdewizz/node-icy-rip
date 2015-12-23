@@ -8,6 +8,8 @@
 *.js.map
 *.js
 
+deploy/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

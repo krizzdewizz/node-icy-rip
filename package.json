@@ -46,6 +46,7 @@
         "typescript": "",
         "grunt-contrib-clean": "",
         "grunt-contrib-copy": "",
-        "grunt-typescript": ""
+        "grunt-typescript": "",
+		"tslint": ""
     }
 }

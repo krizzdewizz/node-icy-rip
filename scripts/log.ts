@@ -1,17 +1,17 @@
 ﻿
-var NULL_LOGGER = () => { };
-var DEFAULT_LOGGER = console.log;
+const NULL_LOGGER = () => { /* do nothing */ };
+const DEFAULT_LOGGER = console.log;
 
-var logger: (msg: string) => void = DEFAULT_LOGGER;
+let logger: (msg: string) => void = DEFAULT_LOGGER;
 
 interface Log {
     (...s: any[]): void;
     enabled: boolean;
 }
 
-var log = (...s: any[]): void => {
+const log = (...s: any[]): void => {
     logger(s.join(''));
-}
+};
 
 Object.defineProperty(log, 'enabled', {
     set: enabled => {
@@ -19,5 +19,5 @@ Object.defineProperty(log, 'enabled', {
     }
 });
 
-var casted = <Log>log;
+const casted = <Log>log;
 export = casted;

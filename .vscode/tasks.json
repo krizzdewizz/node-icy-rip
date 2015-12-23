@@ -1,0 +1,20 @@
+// Calls the Typescript compiler (tsc) and
+// compiles based on a tsconfig.json file that is present in
+// the root of the folder open in VSCode
+{
+	"version": "0.1.0",
+
+	// Assumes that tsc has been installed using npm install -g typescript
+	"command": "tsc",
+
+	"isShellCommand": true,
+
+	// Show the output window only if unrecognized errors occur.
+	"showOutput": "silent",
+
+	// Tell the tsc compiler to use the tsconfig.json from the open folder. Listen for file changes
+	"args": ["-p", ".", "-w"],
+
+	// use the standard tsc problem matcher to find compile problems in the output.
+	"problemMatcher": "$tsc"
+}

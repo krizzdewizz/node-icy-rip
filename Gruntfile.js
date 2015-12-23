@@ -4,17 +4,17 @@ var fs = require('fs');
 var targetFolder = 'deploy';
 
 module.exports = function (grunt) {
-    
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        
+
         clean: {
             clean: path.join(targetFolder, '/**/*'),
             options: {
                 'no-write': false
             }
         },
-        
+
         copy: {
             main: {
                 files: [
@@ -24,7 +24,7 @@ module.exports = function (grunt) {
                 ],
             },
         },
-        
+
         typescript: {
             base: {
                 src: 'scripts/*.ts',
@@ -32,7 +32,7 @@ module.exports = function (grunt) {
                 options: {
                     module: 'commonjs',
                     target: 'es5',
-                    basePath: 'scripts',
+                    rootDir: 'scripts',
                     declaration: false,
                     references: [
                         'scripts/**/*.d.ts'
@@ -40,23 +40,23 @@ module.exports = function (grunt) {
                 }
             }
         },
-        
+
         removeDevDeps: {
             src: ['.', targetFolder],
         },
     });
-    
+
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    
+
     grunt.registerMultiTask('removeDevDeps', '', function () {
         var ps = 'package.json';
-        var src = JSON.parse(fs.readFileSync(path.join(this.data[0], ps)));
+        var src = JSON.parse(String(fs.readFileSync(path.join(this.data[0], ps))));
         delete src.devDependencies;
         fs.writeFileSync(path.join(this.data[1], ps), JSON.stringify(src));
     });
-    
+
     grunt.registerTask('default', ['clean', 'typescript', 'copy', 'removeDevDeps']);
 
 };

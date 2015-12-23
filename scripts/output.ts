@@ -11,12 +11,12 @@ function fixName(name: string): string {
     //return name.replace(/[^a-z0-9 \-\(\)\.]/gi, '_');
 }
 
-var DELETE_SMALL_FILES = false; // may set to true when debugging
-var MIN_FILE_SIZE = 1024 * 1000; // 1M
+const DELETE_SMALL_FILES = false; // may set to true when debugging
+const MIN_FILE_SIZE = 1024 * 1000; // 1M
 
-export var onFileCompleted: () => void = () => { };
+export let onFileCompleted: () => void = () => { /* do nothing */ };
 
-var ffmpegReady = undefined;
+let ffmpegReady = undefined;
 
 function ffmpegTest(callback: (ok: boolean) => void): void {
 
@@ -25,13 +25,13 @@ function ffmpegTest(callback: (ok: boolean) => void): void {
         return;
     }
 
-    var cp = childProcess.spawn('ffmpeg', ['-version']);
-    var ok = true;
+    const cp = childProcess.spawn('ffmpeg', ['-version']);
+    let ok = true;
     cp.on('error', err => {
         log('\'ffmpeg\' was not found. You may need to install it or ensure that it is found in the path. ID3 tagging will be disabled (' + err + ')');
         ok = false;
     });
-    cp.on('close',() => {
+    cp.on('close', () => {
         ffmpegReady = ok;
         callback(ok);
     });
@@ -49,7 +49,7 @@ export class File {
 
     constructor(folder: string, trackNumberOffset: number, public album: string, public genre: string, public streamTitle: string) {
         if (streamTitle) {
-            var segs = streamTitle.split('-');
+            const segs = streamTitle.split('-');
             if (segs.length > 0) {
                 this.artist = segs[0].trim();
             }
@@ -58,7 +58,7 @@ export class File {
             }
         }
 
-        var albumFolder = path.join(folder, fixName(album));
+        const albumFolder = path.join(folder, fixName(album));
         if (!fs.existsSync(albumFolder)) {
             fs.mkdirSync(albumFolder);
         }
@@ -72,8 +72,8 @@ export class File {
     }
 
     private createStream(folder: string): void {
-        var index = 0;
-        var file: string;
+        let index = 0;
+        let file: string;
         do {
             file = this.getUniqueFileName(folder, index);
             index++;
@@ -81,7 +81,7 @@ export class File {
 
         this.file = file;
         this.outStream = fs.createWriteStream(file, { flags: 'w' });
-        this.outStream.once('close',() => {
+        this.outStream.once('close', () => {
 
             if (this.deleteOnClose || DELETE_SMALL_FILES && fs.statSync(this.file).size < MIN_FILE_SIZE) {
                 fs.unlinkSync(this.file);
@@ -114,7 +114,7 @@ export class File {
 
             setTimeout(() => {
                 // http://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
-                var data = {
+                const data = {
                     title: this.title,
                     artist: this.artist,
                     album: this.album,
@@ -128,7 +128,7 @@ export class File {
     }
 
     private getUniqueFileName(folder: string, index: number): string {
-        var name = [this.trackNumber, this.artist, this.title].join(' - ');
+        let name = [this.trackNumber, this.artist, this.title].join(' - ');
         if (index > 0) {
             name += ' (' + index + ')';
         }
