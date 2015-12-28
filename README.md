@@ -48,7 +48,7 @@ module.exports = {
      * @return truthy to record the track, falsy to skip the track
      */
     filter: function(track) {
-        return track.title.match(/prelude/gi);
+        return track.title.match(/prelude/i);
     }
 };
 ```
