@@ -1,6 +1,7 @@
-exports = {
+module.exports = {
+
     /**
-     * Called whenever a new track is detected.
+     * Filter a track from recording.
      * @param headers all 'icy-*' headers (look for 'icy-' in console output when recording) and a 'title' property
      * @return truthy to record the track, falsy to skip the track
      */

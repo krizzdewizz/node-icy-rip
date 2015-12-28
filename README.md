@@ -35,14 +35,15 @@ You may want to visit the SHOUTcast website, copy the Winamp (PLS) or M3U url to
 
 ## Settings
 More settings can be configured by providing a JavaScript file/NodeJS module named `.icy-rip.js` at these locations:
-- current working directory
-- user's home directory. See [here](https://www.npmjs.com/package/homedir) for locations depending on your OS.
+- current working directory.
+- user's home directory. See [here](https://www.npmjs.com/package/homedir) for locations depending to your OS.
 
 The module exports the settings object:
 ```
-exports = {
+module.exports = {
+
     /**
-     * Called whenever a new track is detected.
+     * Filter a track from recording.
      * @param headers all 'icy-*' headers (look for 'icy-' in console output when recording) and a 'title' property
      * @return truthy to record the track, falsy to skip the track
      */
