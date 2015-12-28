@@ -5,11 +5,49 @@ import output = require('./output');
 import discover = require('./discover');
 import progress = require('./progress');
 import log = require('./log');
+var homedir = require('homedir');
 
 export interface Args {
     url: string;
     outputFolder: string;
     teeToStdout: boolean;
+}
+
+export interface Filter {
+    (headers: any): boolean;
+}
+
+export interface Settings {
+    filter: Filter;
+}
+
+const SETTINGS_FILE = '.icy-rip';
+
+function getSettingsFiles(): string[] {
+    return [process.cwd(), homedir()].map(it => path.join(it, SETTINGS_FILE));
+}
+
+function loadFilters(): Filter[] {
+    return getSettingsFiles().map(it => {
+        try {
+            var settings: Settings = require(it);
+            return settings.filter;
+        } catch (err) {
+            if (err.code !== 'MODULE_NOT_FOUND') {
+                log(`Error while loading settings file '${it}': ${err}.`);
+            }
+            return null;
+        }
+    }).filter(it => !!it);
+}
+
+function matches(headers: any, filters: Filter[]): boolean {
+    for (let i = 0, n = filters.length; i < n; i++) {
+        if (!filters[i](headers)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 export function main(args?: Args) {
@@ -25,6 +63,7 @@ export function main(args?: Args) {
     const doNothing = () => { /* do nothing */ };
     const writeToStdout: (data: any) => void = args.teeToStdout ? data => process.stdout.write(data) : doNothing;
     const progressTask: (msg: string) => void = args.teeToStdout ? doNothing : progress.task;
+    const filters = loadFilters();
 
     if (args.teeToStdout) {
         process.stdout.on('error', doNothing);
@@ -57,6 +96,7 @@ export function main(args?: Args) {
             const album = res.headers['icy-name'] || '';
 
             let outFile: output.File;
+            let doOutput: boolean = true;
 
             res.on('metadata', function(metadata: any) { // do not =>
                 const meta = icecast.parse(metadata);
@@ -72,25 +112,38 @@ export function main(args?: Args) {
                 }
 
                 if (!outFile) {
-                    outFile = new output.File(args.outputFolder, trackNumberOffset, album, genre, newTitle);
+                    const headers = JSON.parse(JSON.stringify(res.headers));
+                    headers.title = newTitle;
+                    doOutput = matches(headers, filters);
+                    if (doOutput) {
+                        outFile = new output.File(args.outputFolder, trackNumberOffset, album, genre, newTitle);
+                    } else {
+                        log(`\nSkipping ${newTitle}.`);
+                    }
                 }
             });
 
             res.on('data', (data: Buffer) => {
 
-                if (!outFile) {
-                    outFile = new output.File(args.outputFolder, 0, album, genre, '');
-                    outFile.isInitialFileWithoutMetadata = true;
+                if (doOutput) {
+                    if (!outFile) {
+                        outFile = new output.File(args.outputFolder, 0, album, genre, '');
+                        outFile.isInitialFileWithoutMetadata = true;
+                    }
+
+                    progressTask(outFile.fileName);
+
+                    outFile.write(data);
+                    writeToStdout(data);
                 }
-
-                progressTask(outFile.fileName);
-
-                outFile.write(data);
-                writeToStdout(data);
 
                 if (terminate) {
                     output.onFileCompleted = process.exit;
-                    outFile.close();
+                    if (outFile) {
+                        outFile.close();
+                    } else {
+                        output.onFileCompleted();
+                    }
                 }
             });
         });
