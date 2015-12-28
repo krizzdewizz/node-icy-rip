@@ -1,21 +1,21 @@
 ﻿
 function repeat(s: string, times: number): string {
-    var all = '';
-    for (var i = 0; i < times; i++) {
+    let all = '';
+    for (let i = 0; i < times; i++) {
         all += s;
     }
     return all;
 }
 
-var ERASE = String.fromCharCode(27) + '[2K';
-var counter = 1;
-var lastLineLength = 0;
-var reverse = false;
+const ERASE = String.fromCharCode(27) + '[2K';
+let counter = 1;
+let lastLineLength = 0;
+let reverse = false;
 
 export function task(msg: string): void {
 
-    var back = ERASE + repeat('\b', lastLineLength);
-    var line = msg + ' ' + repeat('.', counter);
+    const back = ERASE + repeat('\b', lastLineLength);
+    const line = msg + ' ' + repeat('.', counter);
 
     process.stdout.write(back);
     process.stdout.write(line);

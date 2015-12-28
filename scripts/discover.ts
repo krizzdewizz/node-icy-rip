@@ -1,4 +1,4 @@
-﻿var http = require('./follow-redirects').http;
+﻿const http = require('./follow-redirects').http;
 import parsers = require('playlist-parser');
 
 export interface Callback {
@@ -6,14 +6,14 @@ export interface Callback {
 }
 
 export function discoverIcyUrl(url: string, callback: Callback): void {
-    tryPlaylist(url,(icyUrl: string, err: Error) => {
-        var req = http.get(icyUrl,(res: any) => {
+    tryPlaylist(url, (icyUrl: string, err: Error) => {
+        const req = http.get(icyUrl, (res: any) => {
             req.abort();
             callback(http.lastRedirectUrl || icyUrl);
         });
 
-        req.on('error',(err: Error) => {
-            if (err['code'] === 'HPE_INVALID_CONSTANT') { // thrown by node http because of ICY response -> assume found
+        req.on('error', err => {
+            if (err.code === 'HPE_INVALID_CONSTANT') { // thrown by node http because of ICY response -> assume found
                 callback(icyUrl);
             } else {
                 callback(url, err);
@@ -34,22 +34,22 @@ function parserFromContentType(contentType: string): parsers.Parser {
 
 function tryPlaylist(url: string, callback: Callback): void {
 
-    var req = http.get(url,(response: any) => {
-        var contentType: string = response.headers['content-type'] || '';
-        var parser = parserFromContentType(contentType);
+    const req = http.get(url, (response: any) => {
+        const contentType: string = response.headers['content-type'] || '';
+        const parser = parserFromContentType(contentType);
         if (!parser) {
             callback(url); // not a known playlist.
             req.abort();
             return;
         }
 
-        var buf = '';
-        response.on('data',(data: string) => {
+        let buf = '';
+        response.on('data', (data: string) => {
             buf += data;
         });
 
-        response.on('end',() => {
-            var playlist = parser.parse(buf);
+        response.on('end', () => {
+            const playlist = parser.parse(buf);
             if (playlist && playlist[0] && playlist[0].file) {
                 callback(playlist[0].file);
             } else {
@@ -57,12 +57,12 @@ function tryPlaylist(url: string, callback: Callback): void {
             }
         });
 
-        response.on('error',(err: Error) => {
+        response.on('error', (err: Error) => {
             callback(url, err);
         });
     });
 
-    req.on('error',(err: Error) => {
+    req.on('error', (err: Error) => {
         callback(url, new Error('not a pls (' + err + ')'));
     });
 }

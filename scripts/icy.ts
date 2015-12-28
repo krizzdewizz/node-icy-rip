@@ -30,7 +30,7 @@ function getSettingsFiles(): string[] {
 function loadFilters(): Filter[] {
     return getSettingsFiles().map(it => {
         try {
-            var settings: Settings = require(it);
+            const settings: Settings = require(it);
             return settings.filter;
         } catch (err) {
             if (err.code !== 'MODULE_NOT_FOUND') {
