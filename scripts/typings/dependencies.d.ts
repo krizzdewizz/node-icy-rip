@@ -1,4 +1,4 @@
-﻿declare module 'icecast' {
+﻿declare module 'icy' {
     export interface Metadata {
         StreamTitle?: string;
     }
@@ -31,3 +31,7 @@ declare module 'playlist-parser' {
     export var M3U: Parser;
 }
 
+declare module 'homedir' {
+    function get(user?:string): string;
+    export = get;
+}

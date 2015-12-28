@@ -1,11 +1,11 @@
-﻿import icecast = require('icecast');
+﻿import icecast = require('icy');
 import fs = require('fs');
 import path = require('path');
 import output = require('./output');
 import discover = require('./discover');
 import progress = require('./progress');
 import log = require('./log');
-var homedir = require('homedir');
+import homedir = require('homedir');
 
 export interface Args {
     url: string;
