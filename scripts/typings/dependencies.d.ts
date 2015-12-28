@@ -32,6 +32,6 @@ declare module 'playlist-parser' {
 }
 
 declare module 'homedir' {
-    function get(user?:string): string;
+    function get(user?: string): string;
     export = get;
 }
