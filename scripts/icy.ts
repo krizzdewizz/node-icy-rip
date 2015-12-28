@@ -13,8 +13,12 @@ export interface Args {
     teeToStdout: boolean;
 }
 
+export interface TrackInfo {
+    title: string;
+}
+
 export interface Filter {
-    (headers: any): boolean;
+    (track: TrackInfo): boolean;
 }
 
 export interface Settings {
@@ -41,9 +45,9 @@ function loadFilters(): Filter[] {
     }).filter(it => !!it);
 }
 
-function matches(headers: any, filters: Filter[]): boolean {
+function matches(track: TrackInfo, filters: Filter[]): boolean {
     for (let i = 0, n = filters.length; i < n; i++) {
-        if (!filters[i](headers)) {
+        if (!filters[i](track)) {
             return false;
         }
     }
