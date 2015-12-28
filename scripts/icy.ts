@@ -113,9 +113,7 @@ export function main(args?: Args) {
                 }
 
                 if (!outFile) {
-                    const headers = JSON.parse(JSON.stringify(res.headers));
-                    headers.title = newTitle;
-                    doOutput = matches(headers, filters);
+                    doOutput = matches({ title: newTitle }, filters);
                     if (doOutput) {
                         outFile = new output.File(args.outputFolder, trackNumberOffset, album, genre, newTitle);
                     } else {
