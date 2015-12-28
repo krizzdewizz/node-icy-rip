@@ -89,7 +89,8 @@ export function main(args?: Args) {
 
         icecast.get(icyUrl, (res: any) => {
 
-            log('Recording from ' + icyUrl);
+            log(`Recording from ${icyUrl}`);
+            log(`Headers:`);
             log(formatHeaders(res.headers));
 
             const genre = res.headers['icy-genre'] || '';
@@ -187,7 +188,7 @@ export function parseProcessArgs(): Args {
 }
 
 function formatHeaders(headers: any): string {
-    return Object.keys(headers).map(k => k + ': ' + headers[k]).join('\n');
+    return Object.keys(headers).sort().map(k => `    ${k}: ${headers[k]}`).join('\n');
 }
 
 function fixMaxEventListenersWarning(): void {

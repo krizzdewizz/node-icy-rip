@@ -1,6 +1,6 @@
 {
   "name": "icy-rip",
-  "version": "0.8.18",
+  "version": "0.8.19",
   "description": "SHOUTcast/Icecast stream recorder",
   "main": "./index",
   "bin": "./index",

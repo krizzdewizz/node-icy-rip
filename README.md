@@ -44,7 +44,7 @@ module.exports = {
 
     /**
      * Filter a track from recording.
-     * @param headers all 'icy-*' headers (look for 'icy-' in console output when recording) and a 'title' property
+     * @param headers all headers (see console output when recording) and a 'title' property
      * @return truthy to record the track, falsy to skip the track
      */
     filter: function(headers) {
