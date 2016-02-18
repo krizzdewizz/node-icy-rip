@@ -93,7 +93,7 @@ export function main(args?: Args) {
 
         icecast.get(icyUrl, (res: any) => {
 
-            log(`Recording from ${icyUrl}`);
+            log(`Recording from ${icyUrl} to ${args.outputFolder}`);
             log(`Headers:`);
             log(formatHeaders(res.headers));
 
